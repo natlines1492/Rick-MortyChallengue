@@ -1,5 +1,6 @@
 import { fetchData } from '../services/apiFetch';
 import { useState, useEffect } from 'react';
+import challengueJson from '../components/outputFormat';
 
 export default function Challengue() {
   const [characters, setCharacters] = useState([]);
@@ -11,28 +12,80 @@ export default function Challengue() {
     fetchData('episode').then(data => setEpisodes(data.results));
     fetchData('location').then(data => setLocations(data.results));
   }, []);
+  
+
+  function counterLetters(data){
+    let counterE = 0;
+    let counterL = 0;
+    let counterC = 0;
+  
+    for(let episode in data){
+        let name = data[episode].name;
+        for (let i in name){
+          counterE = counterE + (name[i] === 'e' ? 1 : 0);
+          counterL = counterL + (name[i] === 'l' ? 1 : 0);
+          counterC = counterC + (name[i] === 'c' ? 1 : 0);
+        }
+    }
+    return [counterL, counterE, counterC];
+  };
+
+//   const chairCounter = [
+//     {
+//         "exercise_name": "Char counter",
+//         "time": "2s 545.573272ms",
+//         "in_time": true,
+//         "results": [
+//             {
+//                 "char": "l",
+//                 "count": counterLetters(locations).reduce((a, b) => a + b),
+//                 "resource": "location"
+//             },
+//             {
+//                 "char": "e",
+//                 "count": counterLetters(episodes).reduce((a, b) => a + b),
+//                 "resource": "episode"
+//             },
+//             {
+//                 "char": "c",
+//                 "count": counterLetters(characters).reduce((a, b) => a + b),
+//                 "resource": "character"
+//             }
+//         ]
+//     },
+//     {
+//       "exercise_name": "Episode locations",
+//       "time": "1s 721.975698ms",
+//       "in_time": true,
+//       "results":  [
+//         {
+//             "name": "Pickle Rick",
+//             "episode": "S03E03",
+//             "locations": [
+//               "Earth (C-137)",
+//               "Earth (Replacement Dimension)",
+//               "unknown"
+//             ]
+//         }
+//     ]
+//   }
+// ]
+
+var chairCounter = challengueJson(
+  counterLetters(locations).reduce((a, b) => a + b),
+  counterLetters(episodes).reduce((a, b) => a + b),
+  counterLetters(characters).reduce((a, b) => a + b),
+)
+
+
+var strChairCounter = JSON.stringify(chairCounter);
+console.log(strChairCounter);
+
 
   return (
     <div className="App">
-      <h1>Challengue</h1>
-      <h2>Characters</h2>
-      <ul>
-        {characters.map(character => (
-          <li key={character.id}>{character.name}</li>
-        ))}
-      </ul>
-      <h2>Episodes</h2>
-      <ul>
-        {episodes.map(episode => (
-          <li key={episode.id}>{episode.name}</li>
-        ))}
-      </ul>
-      <h2>Locations</h2>
-      <ul>
-        {locations.map(location => (
-          <li key={location.id}>{location.name}</li>
-        ))}
-      </ul>
+      <h1>Chair counter</h1>
+      <p>{strChairCounter}</p>
     </div>
   );
 }
