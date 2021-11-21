@@ -30,6 +30,32 @@ export default function Challengue() {
     return [counterL, counterE, counterC];
   };
 
+  function getEpisodesLocations(){
+    let locationsArray = [];
+  
+    for (let episode in episodes){
+      const episodeName = episodes[episode].name;
+      const episodeCode = episodes[episode].episode;
+      let idCharacters = [];
+      let episodeLocations = [];
+  
+      for (let id in episodes[episode].characters){
+        idCharacters.push(parseInt(episodes[episode].characters[id].slice(episodes[episode].characters[id].lastIndexOf('/') + 1)));
+      }
+      characters.map(character => {
+        if(idCharacters.includes(character.id)){
+          episodeLocations.push(character.location.name);
+        }
+      })
+      locationsArray.push({
+        "name": episodeName,
+        "episode": episodeCode,
+        "locations": episodeLocations.filter((v, i, a) => a.indexOf(v) === i)
+      })
+    }
+    return locationsArray;
+  }
+
 //   const chairCounter = [
 //     {
 //         "exercise_name": "Char counter",
@@ -75,6 +101,7 @@ var chairCounter = challengueJson(
   counterLetters(locations).reduce((a, b) => a + b),
   counterLetters(episodes).reduce((a, b) => a + b),
   counterLetters(characters).reduce((a, b) => a + b),
+  getEpisodesLocations()
 )
 
 
