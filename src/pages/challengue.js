@@ -22,9 +22,9 @@ export default function Challengue() {
     for(let episode in data){
         let name = data[episode].name;
         for (let i in name){
-          counterE = counterE + (name[i] === 'e' ? 1 : 0);
-          counterL = counterL + (name[i] === 'l' ? 1 : 0);
-          counterC = counterC + (name[i] === 'c' ? 1 : 0);
+          counterE = counterE + (name[i].toLowerCase() === 'e' ? 1 : 0);
+          counterL = counterL + (name[i].toLowerCase() === 'l' ? 1 : 0);
+          counterC = counterC + (name[i].toLowerCase() === 'c' ? 1 : 0);
         }
     }
     return [counterL, counterE, counterC];
@@ -78,7 +78,7 @@ var chairCounter = challengueJson(
 )
 
 
-var strChairCounter = JSON.stringify(chairCounter);
+var strChairCounter = JSON.stringify(chairCounter, null, 2);
 console.log(strChairCounter);
 
 

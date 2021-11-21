@@ -1,7 +1,7 @@
 
 export default function challengueJson (charCountLocations, charCountEpisodes, charCountCharacter, getEpisodesLocations ) {
-  return (
-  [
+  
+  const jsonObject = [
     {
         "exercise_name": "Char counter",
         "time": "2s 545.573272ms",
@@ -31,5 +31,7 @@ export default function challengueJson (charCountLocations, charCountEpisodes, c
       "results":  getEpisodesLocations
     }
   ]
-  )
-};
+  
+  return jsonObject;
+
+}
