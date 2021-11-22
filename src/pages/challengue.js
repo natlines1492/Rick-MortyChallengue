@@ -6,15 +6,11 @@ export default function Challengue() {
   const [characters, setCharacters] = useState([]);
   const [episodes, setEpisodes] = useState([]);
   const [locations, setLocations] = useState([]);
-    
-  useEffect(() => {
-    fetchData('character').then(data => setCharacters(data.results));
-    fetchData('episode').then(data => setEpisodes(data.results));
-    fetchData('location').then(data => setLocations(data.results));
-  }, []);
-  
+  const [timeCharCount, setTimeCharCount] = useState(0);
+  const [timeEpisodesLocations, setTimeEpisodesLocations] = useState(0);
 
   function counterLetters(data){
+    t0 = performance.now();
     let counterE = 0;
     let counterL = 0;
     let counterC = 0;
@@ -27,10 +23,17 @@ export default function Challengue() {
           counterC = counterC + (name[i].toLowerCase() === 'c' ? 1 : 0);
         }
     }
+    t1 = performance.now();
+    totalTime += t1 - t0;
     return [counterL, counterE, counterC];
   };
 
+  let t0;
+  let t1;
+  let totalTime = 0;
+
   function getEpisodesLocations(){
+    t2 = performance.now();
     let locationsArray = [];
   
     for (let episode in episodes){
@@ -53,67 +56,91 @@ export default function Challengue() {
         "locations": episodeLocations.filter((v, i, a) => a.indexOf(v) === i)
       })
     }
-    return locationsArray;
-  }
+    t3 = performance.now();
+    totalTimeLocations += t3 - t2;
+    console.log(`Time to get locations: ${t3 - t2} ms`);
+    console.log(`Time to get locations: ${totalTimeLocations} ms`);
+    return locationsArray
+  };
 
-//   const chairCounter = [
-//     {
-//         "exercise_name": "Char counter",
-//         "time": "2s 545.573272ms",
-//         "in_time": true,
-//         "results": [
-//             {
-//                 "char": "l",
-//                 "count": counterLetters(locations).reduce((a, b) => a + b),
-//                 "resource": "location"
-//             },
-//             {
-//                 "char": "e",
-//                 "count": counterLetters(episodes).reduce((a, b) => a + b),
-//                 "resource": "episode"
-//             },
-//             {
-//                 "char": "c",
-//                 "count": counterLetters(characters).reduce((a, b) => a + b),
-//                 "resource": "character"
-//             }
-//         ]
-//     },
-//     {
-//       "exercise_name": "Episode locations",
-//       "time": "1s 721.975698ms",
-//       "in_time": true,
-//       "results":  [
-//         {
-//             "name": "Pickle Rick",
-//             "episode": "S03E03",
-//             "locations": [
-//               "Earth (C-137)",
-//               "Earth (Replacement Dimension)",
-//               "unknown"
-//             ]
-//         }
-//     ]
-//   }
-// ]
+  let t2;
+  let t3;
+  let totalTimeLocations = 0;
+  
+  var chairCounter = challengueJson(
+    counterLetters(locations).reduce((a, b) => a + b),
+    counterLetters(episodes).reduce((a, b) => a + b),
+    counterLetters(characters).reduce((a, b) => a + b),
+    getEpisodesLocations(),
+    timeCharCount,
+    timeEpisodesLocations
+  )
 
-var chairCounter = challengueJson(
-  counterLetters(locations).reduce((a, b) => a + b),
-  counterLetters(episodes).reduce((a, b) => a + b),
-  counterLetters(characters).reduce((a, b) => a + b),
-  getEpisodesLocations()
-)
+  var strChairCounter = JSON.stringify(chairCounter, null, 2);
+  console.log(strChairCounter);
 
-
-var strChairCounter = JSON.stringify(chairCounter, null, 2);
-console.log(strChairCounter);
-
+  useEffect(() => {
+    async function fetchAllData() {
+      const [characters, episodes, locations] = await Promise.all([
+        fetchData('character'),
+        fetchData('episode'),
+        fetchData('location')
+      ]);
+      setCharacters(characters.results);
+      setEpisodes(episodes.results);
+      setLocations(locations.results);
+      setTimeCharCount(totalTime);
+      setTimeEpisodesLocations(totalTimeLocations);
+    }
+    fetchAllData();
+  }, []);
 
   return (
+    <>
     <div className="App">
       <h1>Chair counter</h1>
       <p>{strChairCounter}</p>
     </div>
+      <pre>
+        <code>
+          {`
+            {
+              "exercise_name": "Char counter",
+              "time": ${timeCharCount},
+              "in_time": true,
+              "results": [
+                {
+                  "char": "l",
+                  "count": ${counterLetters(locations).reduce((a, b) => a + b)},
+                  "resource": "location"
+                },
+                {
+                  "char": "e",
+                  "count": ${counterLetters(episodes).reduce((a, b) => a + b)},
+                  "resource": "episode"
+                },
+                {
+                  "char": "c",
+                  "count": ${counterLetters(characters).reduce((a, b) => a + b)},
+                  "resource": "character"
+                }
+              ]
+            },
+            {
+              "exercise_name": "Episode locations",
+              "time": ${timeEpisodesLocations},
+              "in_time": true,
+              "results": 
+                        ${JSON.stringify(getEpisodesLocations(), null, 2)}
+            }
+          `}
+        </code>
+      </pre>
+    </>
   );
 }
+
+
+
+
 
