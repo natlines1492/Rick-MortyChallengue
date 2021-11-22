@@ -1,6 +1,5 @@
 import { fetchData } from '../services/apiFetch';
 import { useState, useEffect } from 'react';
-import challengueJson from '../components/outputFormat';
 
 export default function Challengue() {
   const [characters, setCharacters] = useState([]);
@@ -60,24 +59,13 @@ export default function Challengue() {
     totalTimeLocations += t3 - t2;
     console.log(`Time to get locations: ${t3 - t2} ms`);
     console.log(`Time to get locations: ${totalTimeLocations} ms`);
+
     return locationsArray
   };
 
   let t2;
   let t3;
   let totalTimeLocations = 0;
-  
-  var chairCounter = challengueJson(
-    counterLetters(locations).reduce((a, b) => a + b),
-    counterLetters(episodes).reduce((a, b) => a + b),
-    counterLetters(characters).reduce((a, b) => a + b),
-    getEpisodesLocations(),
-    timeCharCount,
-    timeEpisodesLocations
-  )
-
-  var strChairCounter = JSON.stringify(chairCounter, null, 2);
-  console.log(strChairCounter);
 
   useEffect(() => {
     async function fetchAllData() {
@@ -98,44 +86,45 @@ export default function Challengue() {
   return (
     <>
     <div className="App">
-      <h1>Chair counter</h1>
-      <p>{strChairCounter}</p>
+      <h1>Rick&Morty Challengue</h1>
+      <h2>Nathaly Linares</h2>
     </div>
-      <pre>
-        <code>
-          {`
-            {
-              "exercise_name": "Char counter",
-              "time": ${timeCharCount},
-              "in_time": true,
-              "results": [
-                {
-                  "char": "l",
-                  "count": ${counterLetters(locations).reduce((a, b) => a + b)},
-                  "resource": "location"
-                },
-                {
-                  "char": "e",
-                  "count": ${counterLetters(episodes).reduce((a, b) => a + b)},
-                  "resource": "episode"
-                },
-                {
-                  "char": "c",
-                  "count": ${counterLetters(characters).reduce((a, b) => a + b)},
-                  "resource": "character"
-                }
-              ]
-            },
-            {
-              "exercise_name": "Episode locations",
-              "time": ${timeEpisodesLocations},
-              "in_time": true,
-              "results": 
-                        ${JSON.stringify(getEpisodesLocations(), null, 2)}
-            }
-          `}
-        </code>
-      </pre>
+    <div>
+        <pre>
+          <code>
+{`
+{
+  "exercise_name": "Char counter",
+  "time": ${timeCharCount},
+  "in_time": true,
+  "results": [
+    {
+      "char": "l",
+      "count": ${counterLetters(locations).reduce((a, b) => a + b)},
+      "resource": "location"
+    },
+    {
+      "char": "e",
+      "count": ${counterLetters(episodes).reduce((a, b) => a + b)},
+      "resource": "episode"
+    },
+    {
+      "char": "c",
+      "count": ${counterLetters(characters).reduce((a, b) => a + b)},
+      "resource": "character"
+    }
+  ]
+},
+{
+  "exercise_name": "Episode locations",
+  "time": ${timeEpisodesLocations},
+  "in_time": true,
+  "results": ${JSON.stringify(getEpisodesLocations(), null, 2)}
+}
+`}
+          </code>
+        </pre>
+      </div>
     </>
   );
 }
