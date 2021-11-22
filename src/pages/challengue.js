@@ -8,28 +8,33 @@ export default function Challengue() {
   const [timeCharCount, setTimeCharCount] = useState(0);
   const [timeEpisodesLocations, setTimeEpisodesLocations] = useState(0);
 
-  function counterLetters(data){
+  // function array(length) {
+  //   let array = [];
+  //   for (let i = 1; i <= length; i++) {
+  //     array.push(i);
+  //   }
+  //   return array;
+  // }
+
+  function counterLetters(data, letter){
     t0 = performance.now();
-    let counterE = 0;
-    let counterL = 0;
-    let counterC = 0;
+    let counterLetter = 0;
   
     for(let episode in data){
         let name = data[episode].name;
         for (let i in name){
-          counterE = counterE + (name[i].toLowerCase() === 'e' ? 1 : 0);
-          counterL = counterL + (name[i].toLowerCase() === 'l' ? 1 : 0);
-          counterC = counterC + (name[i].toLowerCase() === 'c' ? 1 : 0);
+          counterLetter += (name[i].toLowerCase() === letter ? 1 : 0);
         }
     }
     t1 = performance.now();
-    totalTime += t1 - t0;
-    return [counterL, counterE, counterC];
+    totalTimeCharCounter += t1 - t0;
+
+    return counterLetter;
   };
 
   let t0;
   let t1;
-  let totalTime = 0;
+  let totalTimeCharCounter = 0;
 
   function getEpisodesLocations(){
     t2 = performance.now();
@@ -57,8 +62,6 @@ export default function Challengue() {
     }
     t3 = performance.now();
     totalTimeLocations += t3 - t2;
-    console.log(`Time to get locations: ${t3 - t2} ms`);
-    console.log(`Time to get locations: ${totalTimeLocations} ms`);
 
     return locationsArray
   };
@@ -70,24 +73,26 @@ export default function Challengue() {
   useEffect(() => {
     async function fetchAllData() {
       const [characters, episodes, locations] = await Promise.all([
-        fetchData('character'),
-        fetchData('episode'),
-        fetchData('location')
+        fetchData('character', 826),
+        fetchData('episode', 51),
+        fetchData('location', 126)
       ]);
-      setCharacters(characters.results);
-      setEpisodes(episodes.results);
-      setLocations(locations.results);
-      setTimeCharCount(totalTime);
+      setCharacters(characters);
+      setEpisodes(episodes);
+      setLocations(locations);
+      setTimeCharCount(totalTimeCharCounter);
       setTimeEpisodesLocations(totalTimeLocations);
     }
     fetchAllData();
   }, []);
 
+
   return (
     <>
     <div className="App">
-      <h1>Rick&Morty Challengue</h1>
+      <h1>Rick&Morty Challengue!</h1>
       <h2>Nathaly Linares</h2>
+      <h3>{characters.length} characters</h3>
     </div>
     <div>
         <pre>
@@ -100,17 +105,17 @@ export default function Challengue() {
   "results": [
     {
       "char": "l",
-      "count": ${counterLetters(locations).reduce((a, b) => a + b)},
+      "count": ${counterLetters(locations, 'l')}
       "resource": "location"
     },
     {
       "char": "e",
-      "count": ${counterLetters(episodes).reduce((a, b) => a + b)},
+      "count": ${counterLetters(episodes, 'e')}
       "resource": "episode"
     },
     {
       "char": "c",
-      "count": ${counterLetters(characters).reduce((a, b) => a + b)},
+      "count": ${counterLetters(characters, 'c')}
       "resource": "character"
     }
   ]
