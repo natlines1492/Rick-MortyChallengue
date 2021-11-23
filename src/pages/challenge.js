@@ -27,7 +27,8 @@ export default function Challenge() {
     <>
     <div className="App">
       <h1>Rick&Morty Challengue</h1>
-      <h2>Nathaly Linares</h2>
+      <h2>Thanks for reviewing, I keep remaining if you want to give me feedback!</h2>
+      <h2>*** Nat! ***</h2>
     </div>
     <div>
         <pre>
