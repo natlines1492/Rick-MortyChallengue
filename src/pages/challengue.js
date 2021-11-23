@@ -5,13 +5,11 @@ export default function Challengue() {
   const [characters, setCharacters] = useState([]);
   const [episodes, setEpisodes] = useState([]);
   const [locations, setLocations] = useState([]);
-  const [timeCharCount, setTimeCharCount] = useState(0);
-  const [timeEpisodesLocations, setTimeEpisodesLocations] = useState(0);
 
   //counterLetter function return the number of characters than are equal to the letter passed as argument:
 
   function counterLetters(data, letter){
-    t0 = performance.now();
+    let t0 = performance.now();
     let counterLetter = 0;
   
     for(let episode in data){  //for each episode in the data
@@ -20,20 +18,17 @@ export default function Challengue() {
           counterLetter += (name[i].toLowerCase() === letter ? 1 : 0);  //if the letter is equal to the letter passed as argument, add 1 to the counterLetter
         }
     }
-    t1 = performance.now();
-    totalTimeCharCounter += t1 - t0;
+    let t1 = performance.now();
+    let totalTimeCharCounter = t1 - t0;
+    localStorage.setItem('timeCharCounter', totalTimeCharCounter);
 
     return counterLetter; 
   };
 
-  let t0;
-  let t1;
-  let totalTimeCharCounter = 0;
-
   //getEpisodesLocations function return the locations name for each episode
 
   function getEpisodesLocations(){
-    t2 = performance.now();
+    let t2 = performance.now();
     let locationsArray = [];  //array to store the locations name for each episode
   
     for (let episode in episodes){  //for each episode in episodes seted in the state
@@ -58,15 +53,12 @@ export default function Challengue() {
         "locations": episodeLocations.filter((v, i, a) => a.indexOf(v) === i) // filter for unique values in locations
       })
     }
-    t3 = performance.now();
-    totalTimeLocations += t3 - t2;
+    let t3 = performance.now();
+    let totalTimeLocations = t3 - t2;
+    localStorage.setItem('timeLocations', totalTimeLocations);
 
     return locationsArray
   };
-
-  let t2;
-  let t3;
-  let totalTimeLocations = 0;
 
 
   useEffect(() => {
@@ -79,8 +71,6 @@ export default function Challengue() {
       setCharacters(characters); 
       setEpisodes(episodes);
       setLocations(locations);
-      setTimeCharCount(totalTimeCharCounter);
-      setTimeEpisodesLocations(totalTimeLocations);
     }
     fetchAllData();
   }, []);
@@ -89,7 +79,7 @@ export default function Challengue() {
   return (
     <>
     <div className="App">
-      <h1>Rick&Morty Challengue!</h1>
+      <h1>Rick&Morty Challengue</h1>
       <h2>Nathaly Linares</h2>
     </div>
     <div>
@@ -98,7 +88,7 @@ export default function Challengue() {
 {`
 {
   "exercise_name": "Char counter",
-  "time": ${timeCharCount},
+  "time": ${localStorage.getItem('timeCharCounter')}
   "in_time": true,
   "results": [
     {
@@ -120,7 +110,7 @@ export default function Challengue() {
 },
 {
   "exercise_name": "Episode locations",
-  "time": ${timeEpisodesLocations},
+  "time": ${localStorage.getItem('timeLocations')}
   "in_time": true,
   "results": ${JSON.stringify(getEpisodesLocations(), null, 2)}
 }
