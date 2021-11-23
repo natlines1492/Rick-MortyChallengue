@@ -1,5 +1,7 @@
 const API_URL = "https://rickandmortyapi.com/api";
 
+// This function is used to fetch data from the API and need 2 arguments: the endpoint and length of the data to be fetched.
+
 export const fetchData = async (endpoint, length) => {
 
   function array(length) {

@@ -1,20 +1,4 @@
-# Getting Started with the Docker Image
 
-## Build the attached Docker image
-
-```bash
-docker build -t codeableorg/reactstate .
-```
-
-## Run your docker container
-
-```bash
-docker run --name reactstate -it -v $(pwd)/src:/app/src -p 3000:3000 --rm codeableorg/reactstate
-```
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 If you are not using Docker, and before running any other script you should install your dependencies running:
 
