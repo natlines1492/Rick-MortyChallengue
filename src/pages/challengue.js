@@ -20,7 +20,7 @@ export default function Challengue() {
     }
     let t1 = performance.now();
     let totalTimeCharCounter = t1 - t0;
-    localStorage.setItem('timeCharCounter', totalTimeCharCounter);
+    localStorage.setItem('timeCharCounter', totalTimeCharCounter);  //save the function execution time in the local storage
 
     return counterLetter; 
   };
@@ -28,7 +28,7 @@ export default function Challengue() {
   //getEpisodesLocations function return the locations name for each episode
 
   function getEpisodesLocations(){
-    let t2 = performance.now();
+    let t0 = performance.now();
     let locationsArray = [];  //array to store the locations name for each episode
   
     for (let episode in episodes){  //for each episode in episodes seted in the state
@@ -53,9 +53,9 @@ export default function Challengue() {
         "locations": episodeLocations.filter((v, i, a) => a.indexOf(v) === i) // filter for unique values in locations
       })
     }
-    let t3 = performance.now();
-    let totalTimeLocations = t3 - t2;
-    localStorage.setItem('timeLocations', totalTimeLocations);
+    let t1 = performance.now();
+    let totalTimeLocations = t1 - t0;
+    localStorage.setItem('timeLocations', totalTimeLocations); //save the function execution time in the local storage
 
     return locationsArray
   };
@@ -88,7 +88,7 @@ export default function Challengue() {
 {`
 {
   "exercise_name": "Char counter",
-  "time": ${localStorage.getItem('timeCharCounter')}
+  "time": ${localStorage.getItem('timeCharCounter').slice(0,1) + 's ' + localStorage.getItem('timeCharCounter').slice(2,10) + 'ms'},
   "in_time": true,
   "results": [
     {
@@ -110,7 +110,7 @@ export default function Challengue() {
 },
 {
   "exercise_name": "Episode locations",
-  "time": ${localStorage.getItem('timeLocations')}
+  "time": ${localStorage.getItem('timeLocations').slice(0,1) + 's ' + localStorage.getItem('timeLocations').slice(2,10) + 'ms'},
   "in_time": true,
   "results": ${JSON.stringify(getEpisodesLocations(), null, 2)}
 }
