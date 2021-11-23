@@ -1,9 +1,9 @@
-import Challengue from "./pages/challengue";
+import Challenge from "./pages/challenge";
 
 function App() {
   return (
     <div className="App">
-      <Challengue />
+      <Challenge />
     </div>
   );
 }

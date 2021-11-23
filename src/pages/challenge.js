@@ -1,7 +1,7 @@
 import { fetchData } from '../services/apiFetch';
 import { useState, useEffect } from 'react';
 
-export default function Challengue() {
+export default function Challenge() {
   const [characters, setCharacters] = useState([]);
   const [episodes, setEpisodes] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -19,7 +19,7 @@ export default function Challengue() {
         }
     }
     let t1 = performance.now();
-    let totalTimeCharCounter = t1 - t0;
+    let totalTimeCharCounter = JSON.stringify(t1 - t0).slice(0,1) + 's ' + JSON.stringify(t1 - t0).slice(2,10) + 'ms';
     localStorage.setItem('timeCharCounter', totalTimeCharCounter);  //save the function execution time in the local storage
 
     return counterLetter; 
@@ -43,7 +43,7 @@ export default function Challengue() {
 
       characters.map(character => {  //for each character in the characters seted in the state
         if(idCharacters.includes(character.id)){  //if character's id is in the idCharacters array
-          episodeLocations.push(character.location.name);  //add the character's location name to the episodeLocations array
+          episodeLocations.push(character.origin.name);  //add the character's location name to the episodeLocations array
         }
       })
 
@@ -54,8 +54,9 @@ export default function Challengue() {
       })
     }
     let t1 = performance.now();
-    let totalTimeLocations = t1 - t0;
-    localStorage.setItem('timeLocations', totalTimeLocations); //save the function execution time in the local storage
+    let totalTimeLocations = JSON.stringify(t1 - t0).slice(0,1) + 's ' + JSON.stringify(t1 - t0).slice(2,10) + 'ms';
+
+    localStorage.setItem('timeLocations', totalTimeLocations);  //save the function execution time in the local storage
 
     return locationsArray
   };
@@ -88,31 +89,31 @@ export default function Challengue() {
 {`
 {
   "exercise_name": "Char counter",
-  "time": ${localStorage.getItem('timeCharCounter').slice(0,1) + 's ' + localStorage.getItem('timeCharCounter').slice(2,10) + 'ms'},
+  "time": ${localStorage.getItem('timeCharCounter')  || '0s 0ms'},
   "in_time": true,
   "results": [
     {
       "char": "l",
-      "count": ${counterLetters(locations, 'l')}
+      "count": ${counterLetters(locations, 'l') || 0}
       "resource": "location"
     },
     {
       "char": "e",
-      "count": ${counterLetters(episodes, 'e')}
+      "count": ${counterLetters(episodes, 'e') || 0}
       "resource": "episode"
     },
     {
       "char": "c",
-      "count": ${counterLetters(characters, 'c')}
+      "count": ${counterLetters(characters, 'c') || 0}
       "resource": "character"
     }
   ]
 },
 {
   "exercise_name": "Episode locations",
-  "time": ${localStorage.getItem('timeLocations').slice(0,1) + 's ' + localStorage.getItem('timeLocations').slice(2,10) + 'ms'},
+  "time": ${localStorage.getItem('timeLocations')  || '0s 0ms'},
   "in_time": true,
-  "results": ${JSON.stringify(getEpisodesLocations(), null, 2)}
+  "results": ${JSON.stringify(getEpisodesLocations(), null, 2) || '[]'}
 }
 `}
           </code>
