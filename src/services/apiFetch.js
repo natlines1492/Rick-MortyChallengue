@@ -17,9 +17,6 @@ export const fetchData = async (endpoint, length) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error);
     return error.error;
   }
 };
-
-console.log(fetchData('characters', 826));
