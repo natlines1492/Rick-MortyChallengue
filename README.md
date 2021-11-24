@@ -2,6 +2,8 @@
 
 Hi! 
 
+App deployed in Netlify: https://nervous-mahavira-708b47.netlify.app/
+
 This repo contains a react application that uses a data from Rick Morty API, to return a JSON with the results required for a challenge.
 
 Thanks for reviewing, I keep remaining if you want to give me feedback!
